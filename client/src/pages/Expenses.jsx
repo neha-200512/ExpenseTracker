@@ -6,6 +6,7 @@ import { Calendar } from "primereact/calendar";
 import { Toast } from "primereact/toast";
 import { Dropdown } from "primereact/dropdown";
 import { confirmDialog, ConfirmDialog } from "primereact/confirmdialog";
+import { addLocale } from "primereact/api";
 import AddExpenseDialog from "../components/AddExpenseDialog";
 import ExpenseChart from "../components/ExpenseChart";
 import InsightCards from "../components/InsightCards";
@@ -45,6 +46,11 @@ export default function Expenses() {
 	const [loading, setLoading] = useState(true);
 	const [expenseDialog, setExpenseDialog] = useState(false);
 	const toast = useRef(null);
+
+	addLocale("custom", {
+		today: "Current Month",
+		clear: "Reset",
+	});
 
 	useEffect(() => {
 		loadExpenses();
@@ -222,7 +228,9 @@ export default function Expenses() {
 									dateFormat="MM yy"
 									placeholder="All months"
 									showIcon
+									showButtonBar
 									className="w-full"
+									locale="custom"
 								/>
 							</div>
 							<div>

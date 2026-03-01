@@ -109,6 +109,19 @@ export default function AddExpenseDialog({ visible, onHide, onSave, toast }) {
 
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1.5">
+						Category *
+					</label>
+					<Dropdown
+						value={expense.category}
+						options={DEFAULT_CATEGORIES}
+						onChange={(e) => setExpense({ ...expense, category: e.value })}
+						placeholder="Select a category"
+						className="w-full"
+					/>
+				</div>
+
+				<div>
+					<label className="block text-sm font-medium text-gray-700 mb-1.5">
 						Description *
 					</label>
 					<InputText
@@ -123,19 +136,6 @@ export default function AddExpenseDialog({ visible, onHide, onSave, toast }) {
 
 				<div>
 					<label className="block text-sm font-medium text-gray-700 mb-1.5">
-						Category *
-					</label>
-					<Dropdown
-						value={expense.category}
-						options={DEFAULT_CATEGORIES}
-						onChange={(e) => setExpense({ ...expense, category: e.value })}
-						placeholder="Select a category"
-						className="w-full"
-					/>
-				</div>
-
-				<div>
-					<label className="block text-sm font-medium text-gray-700 mb-1.5">
 						Date *
 					</label>
 					<Calendar
@@ -143,7 +143,8 @@ export default function AddExpenseDialog({ visible, onHide, onSave, toast }) {
 						onChange={(e) => setExpense({ ...expense, date: e.value })}
 						showIcon
 						className="w-full"
-						dateFormat="M dd, yy"
+                        dateFormat="M dd, yy"
+                        maxDate={new Date()}
 					/>
 				</div>
 			</div>
