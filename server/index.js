@@ -2,18 +2,13 @@ import "dotenv/config";
 import express from "express";
 import cors from "cors";
 import morgan from "morgan";
-import pg from "pg";
+import { PrismaClient } from "@prisma/client";
 import { PrismaPg } from "@prisma/adapter-pg";
-import { createRequire } from "node:module";
 import authRouter from "./routers/auth.router.js";
 import expenseRouter from "./routers/expense.router.js";
 
-const require = createRequire(import.meta.url);
-const { PrismaClient } = require("@prisma/client");
-
-// Setup PostgreSQL pool + Prisma adapter
-const pool = new pg.Pool({ connectionString: process.env.DATABASE_URL });
-const adapter = new PrismaPg(pool);
+// Setup Prisma with PG adapter (Prisma 7)
+const adapter = new PrismaPg({ connectionString: process.env.DATABASE_URL });
 
 const app = express();
 const prisma = new PrismaClient({ adapter });
