@@ -15,6 +15,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
+    "@prisma/adapter-pg": "^7.4.2",
     "@prisma/client": "6.19.2",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
@@ -29,6 +30,6 @@
     "schema": "prisma/schema.prisma"
   },
   "engines": {
-  "node": "20.x"
-}
+    "node": "20.x"
+  }
 }
