@@ -6,8 +6,9 @@
   "scripts": {
     "start": "node index.js",
     "dev": "node index.js",
-    "prisma:generate": "npx prisma generate",
-    "prisma:migrate": "npx prisma migrate dev",
+    "build": "prisma generate",
+    "prisma:generate": "prisma generate",
+    "prisma:migrate": "prisma migrate dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -15,7 +16,7 @@
   "license": "ISC",
   "type": "module",
   "dependencies": {
-    "@prisma/adapter-pg": "^7.4.2",
+    "@prisma/adapter-pg": "6.19.2",
     "@prisma/client": "6.19.2",
     "bcrypt": "^6.0.0",
     "cors": "^2.8.6",
