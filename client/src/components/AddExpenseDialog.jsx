@@ -19,7 +19,13 @@ const DEFAULT_CATEGORIES = [
 	"Other",
 ];
 
-export default function AddExpenseDialog({ visible, onHide, onSave, toast }) {
+export default function AddExpenseDialog({
+	visible,
+	onHide,
+	onSave,
+	toast,
+	token,
+}) {
 	const [expense, setExpense] = useState({
 		amount: null,
 		description: "",
@@ -40,8 +46,11 @@ export default function AddExpenseDialog({ visible, onHide, onSave, toast }) {
 		try {
 			const response = await fetch("/api/expenses", {
 				method: "POST",
-				headers: { "Content-Type": "application/json" },
-				body: JSON.stringify({ ...expense, userId: 1 }),
+				headers: {
+					"Content-Type": "application/json",
+					Authorization: `Bearer ${token}`,
+				},
+				body: JSON.stringify(expense),
 			});
 
 			if (response.ok) {
@@ -143,8 +152,8 @@ export default function AddExpenseDialog({ visible, onHide, onSave, toast }) {
 						onChange={(e) => setExpense({ ...expense, date: e.value })}
 						showIcon
 						className="w-full"
-                        dateFormat="M dd, yy"
-                        maxDate={new Date()}
+						dateFormat="M dd, yy"
+						maxDate={new Date()}
 					/>
 				</div>
 			</div>

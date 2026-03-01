@@ -1,7 +1,8 @@
-// Get all expenses
+// Get expenses for the logged-in user
 export const getExpenses = async (req, res) => {
 	try {
 		const expenses = await req.app.locals.prisma.expense.findMany({
+			where: { userId: req.user.id },
 			include: {
 				user: {
 					select: { id: true, name: true, email: true },
@@ -16,10 +17,10 @@ export const getExpenses = async (req, res) => {
 	}
 };
 
-// Create new expense
+// Create new expense for the logged-in user
 export const createExpense = async (req, res) => {
 	try {
-		const { amount, description, date, userId, category } = req.body;
+		const { amount, description, date, category } = req.body;
 
 		const expense = await req.app.locals.prisma.expense.create({
 			data: {
@@ -27,7 +28,7 @@ export const createExpense = async (req, res) => {
 				description,
 				category,
 				date: new Date(date),
-				userId: parseInt(userId),
+				userId: req.user.id,
 			},
 			include: {
 				user: {
@@ -43,10 +44,19 @@ export const createExpense = async (req, res) => {
 	}
 };
 
-// Delete expense
+// Delete expense (only if it belongs to the logged-in user)
 export const deleteExpense = async (req, res) => {
 	try {
 		const expenseId = parseInt(req.params.id);
+
+		// Verify the expense belongs to the user
+		const expense = await req.app.locals.prisma.expense.findFirst({
+			where: { id: expenseId, userId: req.user.id },
+		});
+
+		if (!expense) {
+			return res.status(404).json({ error: "Expense not found" });
+		}
 
 		await req.app.locals.prisma.expense.delete({
 			where: { id: expenseId },
@@ -59,13 +69,13 @@ export const deleteExpense = async (req, res) => {
 	}
 };
 
-// Get expense by ID
+// Get expense by ID (only if it belongs to the logged-in user)
 export const getExpenseById = async (req, res) => {
 	try {
 		const expenseId = parseInt(req.params.id);
 
-		const expense = await req.app.locals.prisma.expense.findUnique({
-			where: { id: expenseId },
+		const expense = await req.app.locals.prisma.expense.findFirst({
+			where: { id: expenseId, userId: req.user.id },
 			include: {
 				user: {
 					select: { id: true, name: true, email: true },

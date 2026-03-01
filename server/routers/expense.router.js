@@ -5,10 +5,14 @@ import {
 	deleteExpense,
 	getExpenseById,
 } from "../controllers/expense.controller.js";
+import auth from "../middlewares/auth.middleware.js";
 
 const router = Router();
 
-// GET /expenses - Get all expenses
+// All expense routes require authentication
+router.use(auth);
+
+// GET /expenses - Get user's expenses
 router.get("/", getExpenses);
 
 // POST /expenses - Create new expense

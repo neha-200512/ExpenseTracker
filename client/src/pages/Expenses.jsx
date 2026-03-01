@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import { useNavigate } from "react-router-dom";
 import { DataTable } from "primereact/datatable";
 import { Column } from "primereact/column";
 import { Button } from "primereact/button";
@@ -10,6 +11,7 @@ import { addLocale } from "primereact/api";
 import AddExpenseDialog from "../components/AddExpenseDialog";
 import ExpenseChart from "../components/ExpenseChart";
 import InsightCards from "../components/InsightCards";
+import { UserIcon } from "lucide-react";
 
 // Category tag colors for visual distinction
 const CATEGORY_COLORS = {
@@ -46,6 +48,16 @@ export default function Expenses() {
 	const [loading, setLoading] = useState(true);
 	const [expenseDialog, setExpenseDialog] = useState(false);
 	const toast = useRef(null);
+	const navigate = useNavigate();
+
+	const token = localStorage.getItem("token");
+	const user = JSON.parse(localStorage.getItem("user") || "{}");
+
+	const handleLogout = () => {
+		localStorage.removeItem("token");
+		localStorage.removeItem("user");
+		navigate("/");
+	};
 
 	addLocale("custom", {
 		today: "Current Month",
@@ -62,7 +74,13 @@ export default function Expenses() {
 
 	const loadExpenses = async () => {
 		try {
-			const response = await fetch("/api/expenses");
+			const response = await fetch("/api/expenses", {
+				headers: { Authorization: `Bearer ${token}` },
+			});
+			if (response.status === 401) {
+				handleLogout();
+				return;
+			}
 			const data = await response.json();
 			setExpenses(Array.isArray(data) ? data : []);
 		} catch (error) {
@@ -106,6 +124,7 @@ export default function Expenses() {
 				try {
 					const res = await fetch(`/api/expenses/${expense.id}`, {
 						method: "DELETE",
+						headers: { Authorization: `Bearer ${token}` },
 					});
 					if (res.ok) {
 						toast.current.show({
@@ -194,17 +213,28 @@ export default function Expenses() {
 						</div>
 						<h1 className="text-xl font-bold text-gray-900">Expense Tracker</h1>
 					</div>
-					<Button
-						label="Add Expense"
-						icon="pi pi-plus"
-						className="p-button-sm"
-						onClick={() => setExpenseDialog(true)}
-					/>
+					<div className="flex items-center gap-4">
+						<Button
+							label="Add Expense"
+							icon="pi pi-plus"
+							className="p-button-sm"
+							onClick={() => setExpenseDialog(true)}
+						/>
+						<Button
+							label="Logout"
+							icon="pi pi-sign-out"
+							className="p-button-sm p-button-outlined p-button-danger"
+							onClick={handleLogout}
+						/>
+					</div>
 				</div>
 			</header>
 
 			<main className="max-w-7xl mx-auto px-4 sm:px-6 py-6 space-y-6">
-				{/* Insight Cards */}
+				{/* Greeting + Insight Cards */}
+				<h2 className="text-2xl font-bold text-gray-900">
+					Hello, {user.name || "User"} !
+				</h2>
 				<InsightCards expenses={filteredExpenses} />
 
 				{/* Charts & Filters Row */}
@@ -351,6 +381,7 @@ export default function Expenses() {
 				onHide={() => setExpenseDialog(false)}
 				onSave={loadExpenses}
 				toast={toast}
+				token={token}
 			/>
 		</div>
 	);
