@@ -1,0 +1,11 @@
+@layer tailwind-base, primereact, tailwind-utilities;
+
+@import "tailwindcss/preflight" layer(tailwind-base);
+@import "tailwindcss/theme" layer(tailwind-base);
+@import "tailwindcss/utilities" layer(tailwind-utilities);
+
+@import "primereact/resources/themes/lara-light-indigo/theme.css" layer(primereact);
+@import "primereact/resources/primereact.min.css" layer(primereact);
+@import "primeicons/primeicons.css" layer(primereact);
+
+
