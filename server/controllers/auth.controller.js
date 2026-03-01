@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 const JWT_SECRET = process.env.JWT_SECRET || "super-secret-key-change-me";
 const JWT_EXPIRES_IN = "7d";
 
-// POST /api/auth/register
+// POST /auth/register
 const register = async (req, res) => {
 	try {
 		const prisma = req.app.locals.prisma;
@@ -56,7 +56,7 @@ const register = async (req, res) => {
 	}
 };
 
-// POST /api/auth/login
+// POST /auth/login
 const login = async (req, res) => {
 	try {
 		const prisma = req.app.locals.prisma;
@@ -96,7 +96,7 @@ const login = async (req, res) => {
 	}
 };
 
-// GET /api/auth/me  (protected)
+// GET /auth/me  (protected)
 const getMe = async (req, res) => {
 	try {
 		const prisma = req.app.locals.prisma;
