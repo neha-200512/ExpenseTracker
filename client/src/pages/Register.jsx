@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { API_BASE } from "../lib/api.js";
 import { InputText } from "primereact/inputtext";
 import { Button } from "primereact/button";
 import { Message } from "primereact/message";
@@ -43,7 +44,7 @@ export default function Register() {
 		setLoading(true);
 
 		try {
-			const res = await fetch("/api/auth/register", {
+			const res = await fetch(`${API_BASE}/api/auth/register`, {
 				method: "POST",
 				headers: { "Content-Type": "application/json" },
 				body: JSON.stringify({ name, email, password }),

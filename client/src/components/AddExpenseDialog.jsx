@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Dialog } from "primereact/dialog";
+import { API_BASE } from "../lib/api.js";
 import { Button } from "primereact/button";
 import { InputText } from "primereact/inputtext";
 import { InputNumber } from "primereact/inputnumber";
@@ -44,7 +45,7 @@ export default function AddExpenseDialog({
 		}
 
 		try {
-			const response = await fetch("/api/expenses", {
+			const response = await fetch(`${API_BASE}/api/expenses`, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/json",

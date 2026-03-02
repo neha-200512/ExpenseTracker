@@ -12,6 +12,7 @@ import AddExpenseDialog from "../components/AddExpenseDialog";
 import ExpenseChart from "../components/ExpenseChart";
 import InsightCards from "../components/InsightCards";
 import { UserIcon } from "lucide-react";
+import { API_BASE } from "../lib/api.js";
 
 // Category tag colors for visual distinction
 const CATEGORY_COLORS = {
@@ -74,7 +75,7 @@ export default function Expenses() {
 
 	const loadExpenses = async () => {
 		try {
-			const response = await fetch("/api/expenses", {
+			const response = await fetch(`${API_BASE}/api/expenses`, {
 				headers: { Authorization: `Bearer ${token}` },
 			});
 			if (response.status === 401) {
@@ -122,7 +123,7 @@ export default function Expenses() {
 			acceptClassName: "p-button-danger",
 			accept: async () => {
 				try {
-					const res = await fetch(`/api/expenses/${expense.id}`, {
+					const res = await fetch(`${API_BASE}/api/expenses/${expense.id}`, {
 						method: "DELETE",
 						headers: { Authorization: `Bearer ${token}` },
 					});
